@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>QR Generator</title>
+
+    <link rel="stylesheet" href="/style.css" />
+  </head>
+
+  <body>
+    <main class="app">
+      <div class="app-header">
+        <h1>QR Generator</h1>
+        <p>Enter a URL and generate a QR code.</p>
+      </div>
+
+      <div class="editor-layout">
+        <!-- LEFT SIDE -->
+        <section class="controls-panel">
+          <div class="input-section">
+            <input type="text" id="qrInput" placeholder="https://example.com" />
+
+            <button id="generateButton">Generate QR</button>
+          </div>
+
+          <div class="logo-section">
+            <button id="logoButton" hidden>Add Logo</button>
+
+            <div id="logoControls" hidden>
+              <div class="logo-upload">
+                <label for="logoInput" class="file-button"> Choose File </label>
+
+                <input
+                  type="file"
+                  id="logoInput"
+                  accept="image/png, image/jpeg, image/webp"
+                  hidden
+                />
+
+                <div id="logoFileName" class="logo-file-name">
+                  No file selected
+                </div>
+              </div>
+
+              <div class="logo-preview-section">
+                <div class="section-label">Logo Preview</div>
+
+                <div class="logo-preview">
+                  <img id="logoPreview" hidden alt="Logo preview" />
+                </div>
+              </div>
+
+              <div class="settings-panel">
+                <h2>Logo Settings</h2>
+
+                <div class="rotation-section">
+                  <label>Rotation</label>
+
+                  <div class="rotation-buttons">
+                    <button
+                      type="button"
+                      class="rotation-button"
+                      data-rotation="0"
+                    >
+                      0°
+                    </button>
+
+                    <button
+                      type="button"
+                      class="rotation-button"
+                      data-rotation="90"
+                    >
+                      90°
+                    </button>
+
+                    <button
+                      type="button"
+                      class="rotation-button"
+                      data-rotation="180"
+                    >
+                      180°
+                    </button>
+
+                    <button
+                      type="button"
+                      class="rotation-button"
+                      data-rotation="270"
+                    >
+                      270°
+                    </button>
+                  </div>
+
+                  <div class="control-group">
+                    <label for="logoRotation">
+                      <span>Fine Rotation</span>
+                      <span id="logoRotationValue">0°</span>
+                    </label>
+
+                    <input
+                      type="range"
+                      id="logoRotation"
+                      min="-180"
+                      max="180"
+                      value="0"
+                    />
+                  </div>
+                </div>
+
+                <div class="control-group">
+                  <label for="logoSize">
+                    <span>Logo Size</span>
+                    <span id="logoSizeValue">20%</span>
+                  </label>
+
+                  <input
+                    type="range"
+                    id="logoSize"
+                    min="10"
+                    max="100"
+                    value="20"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- RIGHT SIDE -->
+        <section class="qr-panel">
+          <div id="qrContainer"></div>
+
+          <div class="qr-actions">
+            <button id="downloadButton" hidden>Download</button>
+
+            <button id="shareButton" hidden>Share</button>
+
+            <button id="copyButton" hidden>Copy</button>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

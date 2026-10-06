@@ -1,0 +1,359 @@
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  width: 100%;
+  min-height: 100%;
+  margin: 0;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background: #f2f2f2;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  padding: 20px;
+}
+
+.app {
+  width: 100%;
+  max-width: 1050px;
+
+  background: white;
+
+  padding: 32px;
+
+  border-radius: 18px;
+
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+/* Header */
+
+.app-header {
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+.app-header h1 {
+  margin: 0 0 6px;
+  font-size: 30px;
+}
+
+.app-header p {
+  margin: 0;
+  color: #666;
+}
+
+/* Main layout */
+
+.editor-layout {
+  display: grid;
+
+  grid-template-columns: 1fr 1fr;
+
+  gap: 40px;
+
+  align-items: center;
+}
+
+/* Left */
+
+.controls-panel {
+  width: 100%;
+}
+
+/* URL */
+
+.input-section {
+  text-align: center;
+}
+
+input[type="text"] {
+  width: 100%;
+
+  padding: 13px;
+
+  border: 1px solid #ccc;
+
+  border-radius: 8px;
+
+  font-size: 15px;
+
+  margin-bottom: 8px;
+}
+
+/* Buttons */
+
+button {
+  padding: 10px 16px;
+
+  border: none;
+
+  border-radius: 8px;
+
+  background: #111;
+
+  color: white;
+
+  font-size: 14px;
+
+  cursor: pointer;
+
+  margin: 4px;
+}
+
+button:hover {
+  background: #333;
+}
+
+/* Logo */
+
+.logo-section {
+  margin-top: 15px;
+
+  text-align: center;
+}
+
+#logoControls {
+  margin-top: 15px;
+
+  text-align: left;
+}
+
+/* File */
+
+.logo-upload {
+  text-align: center;
+}
+
+.file-button {
+  display: inline-block;
+
+  padding: 10px 16px;
+
+  border-radius: 8px;
+
+  background: #111;
+
+  color: white;
+
+  font-size: 14px;
+
+  cursor: pointer;
+}
+
+.file-button:hover {
+  background: #333;
+}
+
+.logo-file-name {
+  margin-top: 6px;
+
+  font-size: 13px;
+
+  color: #666;
+
+  word-break: break-word;
+
+  text-align: center;
+}
+
+/* Logo preview */
+
+.logo-preview-section {
+  margin-top: 16px;
+}
+
+.section-label {
+  font-size: 13px;
+
+  font-weight: bold;
+
+  margin-bottom: 7px;
+
+  text-align: center;
+}
+
+.logo-preview {
+  height: 70px;
+
+  display: flex;
+
+  justify-content: center;
+
+  align-items: center;
+}
+
+.logo-preview img {
+  max-width: 65px;
+
+  max-height: 65px;
+
+  border-radius: 6px;
+
+  border: 1px solid #ddd;
+}
+
+/* Settings */
+
+.settings-panel {
+  margin-top: 15px;
+
+  padding: 16px;
+
+  border: 1px solid #ddd;
+
+  border-radius: 12px;
+
+  background: #fafafa;
+}
+
+.settings-panel h2 {
+  margin: 0 0 13px;
+
+  font-size: 17px;
+
+  text-align: center;
+}
+
+/* Rotation */
+
+.rotation-section {
+  margin-bottom: 12px;
+}
+
+.rotation-section > label {
+  display: block;
+
+  margin-bottom: 6px;
+
+  font-size: 13px;
+
+  font-weight: bold;
+}
+
+.rotation-buttons {
+  display: flex;
+
+  gap: 5px;
+
+  margin-bottom: 12px;
+}
+
+.rotation-button {
+  flex: 1;
+
+  margin: 0;
+
+  padding: 8px 4px;
+
+  font-size: 13px;
+}
+
+/* Sliders */
+
+.control-group {
+  margin-top: 10px;
+}
+
+.control-group label {
+  display: flex;
+
+  justify-content: space-between;
+
+  margin-bottom: 5px;
+
+  font-size: 13px;
+}
+
+.control-group input[type="range"] {
+  width: 100%;
+}
+
+/* QR */
+
+.qr-panel {
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  justify-content: center;
+
+  min-width: 0;
+}
+
+#qrContainer {
+  width: 100%;
+
+  display: flex;
+
+  justify-content: center;
+
+  align-items: center;
+
+  min-height: 320px;
+}
+
+#qrContainer canvas {
+  width: min(360px, 100%);
+
+  height: auto;
+
+  max-width: 100%;
+}
+
+/* QR actions */
+
+.qr-actions {
+  display: flex;
+
+  justify-content: center;
+
+  gap: 5px;
+
+  margin-top: 15px;
+}
+
+.qr-actions button {
+  min-width: 90px;
+
+  margin: 0;
+}
+
+/* Mobile / narrow screens */
+
+@media (max-width: 750px) {
+  body {
+    padding: 10px;
+  }
+
+  .app {
+    padding: 20px;
+  }
+
+  .editor-layout {
+    grid-template-columns: 1fr;
+
+    gap: 25px;
+  }
+
+  .qr-panel {
+    order: -1;
+  }
+
+  #qrContainer {
+    min-height: 250px;
+  }
+
+  #qrContainer canvas {
+    width: min(300px, 100%);
+  }
+}
