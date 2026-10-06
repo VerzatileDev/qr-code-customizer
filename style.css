@@ -54,18 +54,15 @@ body {
 
 .editor-layout {
   display: grid;
-
   grid-template-columns: 1fr 1fr;
-
   gap: 40px;
-
-  align-items: center;
+  align-items: start;
+  margin-top: 55px;
 }
-
-/* Left */
 
 .controls-panel {
   width: 100%;
+  min-height: 520px;
 }
 
 /* URL */
@@ -116,8 +113,20 @@ button:hover {
 
 .logo-section {
   margin-top: 15px;
-
   text-align: center;
+
+  min-height: 430px;
+}
+
+.logo-actions {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+}
+
+.logo-actions button {
+  margin: 0;
 }
 
 #logoControls {
@@ -279,34 +288,29 @@ button:hover {
 /* QR */
 
 .qr-panel {
-  display: flex;
-
-  flex-direction: column;
-
-  align-items: center;
-
-  justify-content: center;
-
+  width: 100%;
   min-width: 0;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+
+  min-height: 520px;
 }
 
 #qrContainer {
   width: 100%;
+  height: 360px;
 
   display: flex;
-
   justify-content: center;
-
-  align-items: center;
-
-  min-height: 320px;
+  align-items: flex-start;
 }
 
 #qrContainer canvas {
   width: min(360px, 100%);
-
   height: auto;
-
   max-width: 100%;
 }
 
@@ -328,6 +332,76 @@ button:hover {
   margin: 0;
 }
 
+.app-footer {
+  margin-top: 35px;
+  padding-top: 18px;
+  border-top: 1px solid #e5e5e5;
+}
+
+.footer-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.footer-left,
+.footer-right {
+  display: flex;
+  align-items: center;
+}
+
+.footer-left {
+  gap: 10px;
+}
+
+.footer-right {
+  gap: 18px;
+}
+
+.footer-avatar {
+  width: 30px;
+  height: 30px;
+  object-fit: cover;
+  border-radius: 50%;
+  display: block;
+}
+
+.footer-left span {
+  font-size: 13px;
+  color: #666;
+}
+
+.footer-link {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  color: #666;
+  text-decoration: none;
+  font-size: 13px;
+  transition: color 0.2s ease;
+}
+
+.footer-link:hover {
+  color: #111;
+}
+
+.footer-icon {
+  width: 20px;
+  height: 20px;
+  display: block;
+}
+
+#logoBackgroundColor {
+  width: 100%;
+  height: 38px;
+  padding: 3px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background: white;
+  cursor: pointer;
+}
+
 /* Mobile / narrow screens */
 
 @media (max-width: 750px) {
@@ -341,16 +415,24 @@ button:hover {
 
   .editor-layout {
     grid-template-columns: 1fr;
-
     gap: 25px;
   }
 
   .qr-panel {
     order: -1;
+    min-height: 250px;
+  }
+
+  .controls-panel {
+    min-height: 430px;
+  }
+
+  .logo-section {
+    min-height: 430px;
   }
 
   #qrContainer {
-    min-height: 250px;
+    height: 300px;
   }
 
   #qrContainer canvas {

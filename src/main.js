@@ -5,15 +5,13 @@ const generateButton = document.getElementById("generateButton");
 
 const downloadButton = document.getElementById("downloadButton");
 const shareButton = document.getElementById("shareButton");
-const copyButton = document.getElementById("copyButton");
 
 const qrContainer = document.getElementById("qrContainer");
 
 const logoButton = document.getElementById("logoButton");
+const removeLogoButton = document.getElementById("removeLogoButton");
 const logoControls = document.getElementById("logoControls");
 const logoInput = document.getElementById("logoInput");
-const logoFileName = document.getElementById("logoFileName");
-const logoPreview = document.getElementById("logoPreview");
 
 const logoSize = document.getElementById("logoSize");
 const logoSizeValue = document.getElementById("logoSizeValue");
@@ -22,23 +20,52 @@ const logoRotation = document.getElementById("logoRotation");
 const logoRotationValue = document.getElementById("logoRotationValue");
 
 const rotationButtons = document.querySelectorAll(".rotation-button");
+const logoBackgroundColor = document.getElementById("logoBackgroundColor");
+
+const logoBackgroundColorValue = document.getElementById(
+  "logoBackgroundColorValue",
+);
 
 let currentCanvas = null;
 let logoImage = null;
 let currentRotation = 0;
 
+// --------------------------------------------------
+// Show placeholder QR when the page loads
+// --------------------------------------------------
+
+showPlaceholderQR();
+
+// --------------------------------------------------
 // Generate QR
+// --------------------------------------------------
+
 generateButton.addEventListener("click", generateQR);
 
-// Show/hide logo controls
+// --------------------------------------------------
+// Add / replace logo
+// --------------------------------------------------
+
 logoButton.addEventListener("click", () => {
-  logoControls.hidden = !logoControls.hidden;
+  logoInput.click();
 });
 
+// --------------------------------------------------
+// Remove logo
+// --------------------------------------------------
+
+removeLogoButton.addEventListener("click", removeLogo);
+
+// --------------------------------------------------
 // Logo upload
+// --------------------------------------------------
+
 logoInput.addEventListener("change", handleLogoUpload);
 
+// --------------------------------------------------
 // Logo size
+// --------------------------------------------------
+
 logoSize.addEventListener("input", () => {
   logoSizeValue.textContent = `${logoSize.value}%`;
 
@@ -47,7 +74,23 @@ logoSize.addEventListener("input", () => {
   }
 });
 
+// --------------------------------------------------
+// Logo background color
+// --------------------------------------------------
+
+logoBackgroundColor.addEventListener("input", () => {
+  logoBackgroundColorValue.textContent =
+    logoBackgroundColor.value.toUpperCase();
+
+  if (logoImage) {
+    generateQR();
+  }
+});
+
+// --------------------------------------------------
 // Fine rotation
+// --------------------------------------------------
+
 logoRotation.addEventListener("input", () => {
   currentRotation = Number(logoRotation.value);
 
@@ -60,7 +103,10 @@ logoRotation.addEventListener("input", () => {
   }
 });
 
-// Rotation preset buttons
+// --------------------------------------------------
+// Rotation presets
+// --------------------------------------------------
+
 rotationButtons.forEach((button) => {
   button.addEventListener("click", () => {
     const rotation = Number(button.dataset.rotation);
@@ -72,6 +118,7 @@ rotationButtons.forEach((button) => {
     }
 
     logoRotation.value = currentRotation;
+
     logoRotationValue.textContent = `${currentRotation}°`;
 
     updateRotationButtons();
@@ -82,7 +129,44 @@ rotationButtons.forEach((button) => {
   });
 });
 
-// Generate QR code
+// --------------------------------------------------
+// Placeholder QR
+// --------------------------------------------------
+
+async function showPlaceholderQR() {
+  qrContainer.innerHTML = "";
+
+  const canvas = document.createElement("canvas");
+
+  try {
+    await QRCode.toCanvas(canvas, "https://verzatiledev.itch.io/", {
+      width: 360,
+      margin: 4,
+      errorCorrectionLevel: "H",
+
+      color: {
+        dark: "#b5b5b5",
+        light: "#ffffff",
+      },
+    });
+
+    canvas.classList.add("placeholder-qr");
+
+    qrContainer.appendChild(canvas);
+
+    // Important:
+    // This is only the placeholder.
+    // It must NOT become the downloadable QR.
+    currentCanvas = null;
+  } catch (error) {
+    console.error("Placeholder QR generation error:", error);
+  }
+}
+
+// --------------------------------------------------
+// Generate actual QR
+// --------------------------------------------------
+
 async function generateQR() {
   const text = input.value.trim();
 
@@ -102,7 +186,7 @@ async function generateQR() {
       errorCorrectionLevel: "H",
     });
 
-    // Add logo if one has been selected
+    // Add logo if one exists
     if (logoImage) {
       drawLogo(canvas, logoImage);
     }
@@ -111,39 +195,42 @@ async function generateQR() {
 
     currentCanvas = canvas;
 
-    // Show QR action buttons
+    // Show QR actions
     downloadButton.hidden = false;
     shareButton.hidden = false;
-    copyButton.hidden = false;
 
-    // Only show Add Logo after a QR has been generated
+    // Show Add Logo
     logoButton.hidden = false;
   } catch (error) {
     console.error("QR generation error:", error);
+
     alert("Could not generate the QR code.");
   }
 }
 
-// Logo upload
+// --------------------------------------------------
+// Handle logo upload
+// --------------------------------------------------
+
 function handleLogoUpload(event) {
   const file = event.target.files[0];
 
+  // User cancelled the file picker
   if (!file) {
     return;
   }
 
   const allowedTypes = ["image/png", "image/jpeg", "image/webp"];
 
+  // Invalid file
   if (!allowedTypes.includes(file.type)) {
     alert("Please choose a PNG, JPG, JPEG, or WebP image.");
 
+    // Do not remove an existing logo
     logoInput.value = "";
-    logoFileName.textContent = "No file selected";
 
     return;
   }
-
-  logoFileName.textContent = file.name;
 
   const reader = new FileReader();
 
@@ -151,12 +238,23 @@ function handleLogoUpload(event) {
     const image = new Image();
 
     image.onload = function () {
+      // Replace the current logo
       logoImage = image;
 
-      logoPreview.src = reader.result;
-      logoPreview.hidden = false;
+      // Show settings
+      logoControls.hidden = false;
 
+      // Show Remove Logo
+      removeLogoButton.hidden = false;
+
+      // Generate QR with the new logo
       generateQR();
+    };
+
+    image.onerror = function () {
+      alert("Could not load that image.");
+
+      logoInput.value = "";
     };
 
     image.src = reader.result;
@@ -165,14 +263,57 @@ function handleLogoUpload(event) {
   reader.readAsDataURL(file);
 }
 
+// --------------------------------------------------
+// Remove logo
+// --------------------------------------------------
+
+function removeLogo() {
+  // Remove image
+  logoImage = null;
+
+  // Clear file input
+  logoInput.value = "";
+
+  // Hide settings
+  logoControls.hidden = true;
+
+  // Hide Remove Logo
+  removeLogoButton.hidden = true;
+
+  // Reset rotation
+  currentRotation = 0;
+
+  logoRotation.value = 0;
+  logoRotationValue.textContent = "0°";
+
+  logoBackgroundColor.value = "#ffffff";
+
+  logoBackgroundColorValue.textContent = "#FFFFFF";
+
+  // Reset size
+  logoSize.value = 20;
+  logoSizeValue.textContent = "20%";
+
+  // Reset rotation button state
+  updateRotationButtons();
+
+  // Regenerate QR without logo
+  if (input.value.trim()) {
+    generateQR();
+  }
+}
+
+// --------------------------------------------------
 // Draw logo onto QR
+// --------------------------------------------------
+
 function drawLogo(canvas, image) {
   const ctx = canvas.getContext("2d");
 
-  // White backing is 30% of the QR size
+  // White backing is always 30% of QR size
   const backingSize = canvas.width * 0.3;
 
-  // Logo size is a percentage of the backing
+  // Logo size is percentage of backing
   const logoSizePercent = Number(logoSize.value);
 
   const calculatedLogoSize = backingSize * (logoSizePercent / 100);
@@ -180,10 +321,13 @@ function drawLogo(canvas, image) {
   const centerX = canvas.width / 2;
   const centerY = canvas.height / 2;
 
-  // Draw fixed white backing
+  // ----------------------------------------------
+  // White backing
+  // ----------------------------------------------
+
   ctx.save();
 
-  ctx.fillStyle = "white";
+  ctx.fillStyle = logoBackgroundColor.value;
 
   ctx.fillRect(
     centerX - backingSize / 2,
@@ -194,7 +338,10 @@ function drawLogo(canvas, image) {
 
   ctx.restore();
 
-  // Clip logo to the white backing
+  // ----------------------------------------------
+  // Clip logo to backing
+  // ----------------------------------------------
+
   ctx.save();
 
   ctx.beginPath();
@@ -208,12 +355,18 @@ function drawLogo(canvas, image) {
 
   ctx.clip();
 
+  // ----------------------------------------------
   // Rotate only the logo
+  // ----------------------------------------------
+
   ctx.translate(centerX, centerY);
 
   ctx.rotate((currentRotation * Math.PI) / 180);
 
+  // ----------------------------------------------
   // Draw logo
+  // ----------------------------------------------
+
   ctx.drawImage(
     image,
     -calculatedLogoSize / 2,
@@ -225,11 +378,15 @@ function drawLogo(canvas, image) {
   ctx.restore();
 }
 
+// --------------------------------------------------
 // Update rotation buttons
+// --------------------------------------------------
+
 function updateRotationButtons() {
   rotationButtons.forEach((button) => {
     let rotation = Number(button.dataset.rotation);
 
+    // 270° is represented as -90°
     if (rotation === 270) {
       rotation = -90;
     }
@@ -238,7 +395,10 @@ function updateRotationButtons() {
   });
 }
 
-// Download QR
+// --------------------------------------------------
+// Download
+// --------------------------------------------------
+
 downloadButton.addEventListener("click", () => {
   if (!currentCanvas) {
     return;
@@ -247,44 +407,16 @@ downloadButton.addEventListener("click", () => {
   const link = document.createElement("a");
 
   link.download = "qr-code.png";
+
   link.href = currentCanvas.toDataURL("image/png");
 
   link.click();
 });
 
-// Copy QR image
-copyButton.addEventListener("click", () => {
-  if (!currentCanvas) {
-    return;
-  }
-
-  currentCanvas.toBlob(async (blob) => {
-    if (!blob) {
-      alert("Could not create the QR image.");
-      return;
-    }
-
-    try {
-      const clipboardItem = new ClipboardItem({
-        "image/png": blob,
-      });
-
-      await navigator.clipboard.write([clipboardItem]);
-
-      copyButton.textContent = "Copied!";
-
-      setTimeout(() => {
-        copyButton.textContent = "Copy";
-      }, 1500);
-    } catch (error) {
-      console.error("QR image copy failed:", error);
-
-      alert("Could not copy the QR image. " + "Please try again.");
-    }
-  }, "image/png");
-});
-
+// --------------------------------------------------
 // Share
+// --------------------------------------------------
+
 shareButton.addEventListener("click", async () => {
   const text = input.value.trim();
 
@@ -292,7 +424,7 @@ shareButton.addEventListener("click", async () => {
     return;
   }
 
-  // Use the browser/device share menu if supported
+  // Browser/device share menu
   if (navigator.share) {
     try {
       await navigator.share({
@@ -301,18 +433,19 @@ shareButton.addEventListener("click", async () => {
         url: text,
       });
     } catch (error) {
-      // User cancelling the share menu is not an error
+      // Cancelling the share menu isn't an error
       if (error.name !== "AbortError") {
         console.error("Share failed:", error);
       }
     }
   } else {
-    // Fallback for browsers without Web Share API
+    // Fallback
     try {
       await navigator.clipboard.writeText(text);
 
       alert(
-        "Sharing is not supported by this browser. The URL has been copied instead.",
+        "Sharing is not supported by this browser. " +
+          "The URL has been copied instead.",
       );
     } catch (error) {
       alert("Sharing is not supported by this browser.");
