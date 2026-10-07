@@ -11,7 +11,7 @@ body {
 
 body {
   font-family: Arial, sans-serif;
-  background: #f2f2f2;
+  background: #151c26;
 
   display: flex;
   justify-content: center;
@@ -24,7 +24,7 @@ body {
   width: 100%;
   max-width: 1050px;
 
-  background: white;
+  background: rgba(0, 0, 0, 0.55);
 
   padding: 32px;
 
@@ -43,11 +43,12 @@ body {
 .app-header h1 {
   margin: 0 0 6px;
   font-size: 30px;
+  color: #633dba;
 }
 
 .app-header p {
   margin: 0;
-  color: #666;
+  color: #ffffff;
 }
 
 /* Main layout */
@@ -89,24 +90,26 @@ input[type="text"] {
 
 button {
   padding: 10px 16px;
-
   border: none;
-
   border-radius: 8px;
-
-  background: #111;
-
+  background: #633dba;
   color: white;
-
   font-size: 14px;
-
   cursor: pointer;
-
   margin: 4px;
 }
 
 button:hover {
-  background: #333;
+  background: #754ed0;
+}
+
+button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.rotation-button.active {
+  background: #633dba;
 }
 
 /* Logo */
@@ -133,6 +136,18 @@ button:hover {
   margin-top: 15px;
 
   text-align: left;
+  opacity: 0.45;
+  pointer-events: none;
+}
+
+#logoControls.enabled {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+#logoControls button:disabled,
+#logoControls input:disabled {
+  cursor: not-allowed;
 }
 
 /* File */
@@ -383,7 +398,7 @@ button:hover {
 }
 
 .footer-link:hover {
-  color: #111;
+  color: #633dba;
 }
 
 .footer-icon {

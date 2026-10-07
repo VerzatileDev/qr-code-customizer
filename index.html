@@ -13,7 +13,9 @@
     <main class="app">
       <div class="app-header">
         <h1>QR Generator</h1>
-        <p>Enter a URL and generate a QR code.</p>
+        <p>
+          Generate a QR code from any URL and personalize it with your own logo.
+        </p>
       </div>
 
       <div class="editor-layout">
@@ -41,7 +43,7 @@
             />
 
             <!-- Logo settings -->
-            <div id="logoControls" hidden>
+            <div id="logoControls">
               <div class="settings-panel">
                 <h2>Logo Settings</h2>
 
@@ -53,6 +55,7 @@
                       type="button"
                       class="rotation-button"
                       data-rotation="0"
+                      disabled
                     >
                       0°
                     </button>
@@ -61,6 +64,7 @@
                       type="button"
                       class="rotation-button"
                       data-rotation="90"
+                      disabled
                     >
                       90°
                     </button>
@@ -69,6 +73,7 @@
                       type="button"
                       class="rotation-button"
                       data-rotation="180"
+                      disabled
                     >
                       180°
                     </button>
@@ -77,6 +82,7 @@
                       type="button"
                       class="rotation-button"
                       data-rotation="270"
+                      disabled
                     >
                       270°
                     </button>
@@ -94,6 +100,7 @@
                       min="-180"
                       max="180"
                       value="0"
+                      disabled
                     />
                   </div>
                 </div>
@@ -110,6 +117,7 @@
                     min="10"
                     max="100"
                     value="20"
+                    disabled
                   />
                 </div>
 
@@ -123,6 +131,7 @@
                     type="color"
                     id="logoBackgroundColor"
                     value="#ffffff"
+                    disabled
                   />
                 </div>
               </div>
